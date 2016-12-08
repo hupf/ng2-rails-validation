@@ -1,0 +1,21 @@
+<form [formGroup]="form" (submit)="onSubmit()">
+  <app-form-errors [errors]="formErrors()"></app-form-errors>
+
+  <label class="label">{{ 'form.name' | translate }}</label>
+  <p class="control">
+    <input class="input" type="text" formControlName="name"
+           [ngClass]="{ 'is-danger': fieldErrors('name') }">
+    <app-field-errors [errors]="fieldErrors('name')"></app-field-errors>
+  </p>
+
+  <label class="label">{{ 'form.description' | translate }}</label>
+  <p class="control">
+    <textarea class="textarea" formControlName="description"></textarea>
+    <app-field-errors [errors]="fieldErrors('description')"></app-field-errors>
+  </p>
+
+  <p class="control">
+    <button class="button is-primary" type="submit">{{ 'form.submit' | translate }}</button>
+    <button class="button is-link" type="button" (click)="cancel.emit()">{{ 'form.cancel' | translate }}</button>
+  </p>
+</form>

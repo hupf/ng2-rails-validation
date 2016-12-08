@@ -1,0 +1,23 @@
+<section class="section">
+  <button class="button"
+          *ngIf="!showForm"
+          (click)="showForm = true">{{ 'form.add' | translate }}</button>
+  <app-category-form *ngIf="showForm" (added)="categoryAdded($event)" (cancel)="formCanceled()"></app-category-form>
+</section>
+
+<section class="section">
+  <table class="table" *ngIf="categories && categories.length > 0">
+    <thead>
+      <tr>
+        <th>Name</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let category of categories">
+        <td>{{category.name}}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p *ngIf="!categories || categories.length === 0">No categories available</p>
+</section>
