@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 import { FormGroup, AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { CategoriesRestService, Category } from '../categories-rest.service';
 
@@ -11,24 +11,19 @@ export interface FormError {
   selector: 'app-category-form',
   templateUrl: './category-form.component.html'
 })
-export class CategoryFormComponent implements OnInit {
+export class CategoryFormComponent {
 
   @Output() added: EventEmitter<Category> = new EventEmitter<Category>();
   @Output() cancel: EventEmitter<void> = new EventEmitter<void>();
 
   form: FormGroup;
   submitted: boolean = false;
-  invalidControls: string[];
 
   constructor(private restService: CategoriesRestService, fb: FormBuilder) {
     this.form = fb.group({
       name: ['', Validators.compose([Validators.required, Validators.maxLength(10)])],
       description: ['']
     });
-  }
-
-  ngOnInit() {
-    this.form.statusChanges.subscribe(() => setTimeout(this.formStatusChanged.bind(this)));
   }
 
   onSubmit() {
@@ -122,26 +117,6 @@ export class CategoryFormComponent implements OnInit {
       errors[name] = e;
     });
     return errors;
-  }
-
-  protected formStatusChanged(status: string) {
-    if (status === undefined) {
-      return;
-    }
-    const hash: { [name: string]: AbstractControl } = {};
-    this.getFlatControls(hash, this.form, '')
-    this.invalidControls = Object.keys(hash).filter(c => !!hash[c].errors);
-  }
-
-  protected getFlatControls(hash: { [name: string]: AbstractControl }, group: FormGroup, prefix: string) {
-    for (let name in group.controls) {
-      const control = group.get(name);
-      if (control instanceof FormGroup) {
-        this.getFlatControls(hash, control, prefix + name + '.');
-      } else {
-        hash[prefix + name] = control;
-      }
-    }
   }
 
 }
